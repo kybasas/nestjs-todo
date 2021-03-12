@@ -1,8 +1,13 @@
 import { QueryParams, RepositoryPort } from '../ports/repository.ports';
+import {Logger} from "../ports/logger.port";
+import {writeDataToFile} from "../../utils/writeDataToFile";
 
 export abstract class FileRepositoryBase<Entity, EntityProps>
   implements RepositoryPort<Entity, EntityProps> {
-  delete(entity: Entity): Promise<Entity> {
+
+  protected constructor(protected readonly logger: Logger,protected repository: any[],protected mapper: FileMapper<Entity>) { }
+
+  async deleteById(id: string) {
     return Promise.resolve(undefined);
   }
 
@@ -18,7 +23,12 @@ export abstract class FileRepositoryBase<Entity, EntityProps>
     return Promise.resolve(undefined);
   }
 
-  save(entity: Entity): Promise<Entity> {
+   save(entity: Entity): Promise<Entity> {
+    return new Promise((resolve, reject) => {
+      this.repository.push(this.mapper.toFileEntity(entity))
+      writeDataToFile('./data/products.json', this.repository);
+      resolve(entity)
+    })
     return Promise.resolve(undefined);
   }
 
