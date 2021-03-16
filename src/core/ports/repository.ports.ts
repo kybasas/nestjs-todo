@@ -26,8 +26,8 @@ export interface OrderBy {
   [key: number]: -1 | 1;
 }
 
-export interface DeleteById<Entity> {
-  deleteById(id: string);
+export interface DeleteOne<Entity> {
+  delete(entity: Entity): Promise<Entity>;
 }
 
 export interface RepositoryPort<Entity, EntityProps>
@@ -35,5 +35,5 @@ export interface RepositoryPort<Entity, EntityProps>
     FindOne<Entity, EntityProps>,
     FindOneById<Entity>,
     FindMany<Entity, EntityProps>,
-    DeleteById<Entity>,
+    DeleteOne<Entity>,
     SaveMultiple<Entity> {}
